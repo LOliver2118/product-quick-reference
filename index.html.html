@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Quick Reference Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 30px; }
+        h1 { color: #333; font-size: 28px; margin-bottom: 15px; }
+        .search-bar { display: flex; gap: 10px; margin-top: 15px; }
+        #searchInput { flex: 1; padding: 12px 20px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; transition: border-color 0.3s; }
+        #searchInput:focus { outline: none; border-color: #667eea; }
+        .filter-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+        .filter-btn { padding: 8px 16px; background: #f0f0f0; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
+        .filter-btn:hover { background: #667eea; color: white; }
+        .filter-btn.active { background: #667eea; color: white; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 25px; }
+        .product-card { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); transition: transform 0.3s, box-shadow 0.3s; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+        .product-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0; }
+        .product-icon { width: 80px; height: 80px; background: #f5f5f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 2px solid #e0e0e0; font-size: 32px; }
+        .product-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .product-info { flex: 1; }
+        .product-name { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 5px; }
+        .product-id { font-size: 12px; color: #888; background: #f5f5f5; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+        .application { font-size: 13px; color: #666; margin-bottom: 15px; font-style: italic; }
+        .alternatives-section { margin-top: 15px; padding-top: 15px; border-top: 2px solid #f0f0f0; }
+        .section-title { font-size: 14px; font-weight: 600; color: #667eea; margin-bottom: 10px; }
+        .alternatives-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+        .alternative-item { background: #fff8e1; padding: 10px; border-radius: 6px; border-left: 3px solid #ffa726; font-size: 13px; }
+        .alternative-name { font-weight: 600; color: #333; margin-bottom: 3px; }
+        .alternative-desc { color: #666; font-size: 12px; }
+        .differences-box { background: #e8f5e9; padding: 10px; border-radius: 6px; border-left: 3px solid #66bb6a; font-size: 12px; color: #2e7d32; line-height: 1.5; }
+        .upsell-section { margin-top: 15px; }
+        .upsell-items { display: flex; flex-direction: column; gap: 10px; }
+        .upsell-item { background: #f8f9ff; padding: 12px; border-radius: 8px; border-left: 3px solid #667eea; transition: background 0.2s; }
+        .upsell-item:hover { background: #eef0ff; }
+        .upsell-name { font-weight: 600; color: #333; font-size: 14px; margin-bottom: 4px; }
+        .upsell-desc { font-size: 12px; color: #666; line-height: 1.4; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px; }
+        .badge-ppe { background: #fff3e0; color: #f57c00; }
+        .badge-equipment { background: #e8f5e9; color: #2e7d32; }
+        .no-results { grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: white; border-radius: 15px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Product Rental & Sales Quick Reference Guide</h1>
+            <p style="color: #666; margin-top: 5px;">Search for products to see recommended add-ons and upsell items</p>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by product name, M3 item number, or application...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Products</button>
+                <button class="filter-btn" data-filter="air-monitoring">Air Monitoring</button>
+                <button class="filter-btn" data-filter="confined-space">Confined Space</button>
+                <button class="filter-btn" data-filter="water-quality">Water Quality</button>
+                <button class="filter-btn" data-filter="soil-analysis">Soil Analysis</button>
+                <button class="filter-btn" data-filter="respiratory">Respiratory</button>
+                <button class="filter-btn" data-filter="site-assessment">Site Assessment</button>
+                <button class="filter-btn" data-filter="ndt">NDT Testing</button>
+                <button class="filter-btn" data-filter="landfill-monitoring">Landfill</button>
+                <button class="filter-btn" data-filter="leak-detection">Leak Detection</button>
+            </div>
+        </header>
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+    <script>
+        var products = [
+            { id: "51238", name: "PID-MiniRAE 3000 Monitor", category: "air-monitoring", image: "PRODUCT_IMAGES/51238-minirae-3000.jpg", application: "Air Monitoring, Indoor air quality, soil analysis", alternatives: [{ name: "RKI GX-6000 PID", desc: "Alternative PID monitor" }], differences: "MiniRAE 3000: 0-15,000 ppm range. RKI GX6000: 0-6000 ppm range", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, rubber boots, safety glasses", type: "ppe" }, { name: "Tedlar Bags", desc: "For air sampling collection", type: "equipment" }, { name: "Calibration Gas & Soil Jars", desc: "Additional supplies", type: "equipment" }] },
+            { id: "51359", name: "DustTrak2 Desktop Monitor 8530", category: "air-monitoring", image: "PRODUCT_IMAGES/51359-dusttrak2-8530.jpg", application: "Indoor air quality, Air monitoring", alternatives: [{ name: "TSI DustTrak DRX", desc: "Desktop aerosol monitor" }, { name: "Thermo pdr-1600", desc: "Portable dust monitor" }], differences: "Particle size range: 0.1-10um. Concentration range: 0.001-150 mg/m3", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Air Sampling Pumps", desc: "Filter media 37mm or 25mm cassettes", type: "equipment" }] },
+            { id: "51277", name: "MultiRAE PGM-6228 Multi-Gas", category: "confined-space", image: "PRODUCT_IMAGES/51277-multirae-6228.jpg", application: "Confined space entry, Indoor Air Quality", alternatives: [{ name: "RKI GX-6000 multi-gas", desc: "Alternative multi-gas detector" }], differences: "Only differ in size and some sensor options", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, respirators, cartridges", type: "ppe" }, { name: "Calibration Gas", desc: "Tedlar bags, calibration gas, soil jars", type: "equipment" }, { name: "Rescue Equipment", desc: "Tripod, winch, harness rescue system", type: "equipment" }, { name: "Manhole Blower", desc: "Ventilation for confined spaces", type: "equipment" }] },
+            { id: "51381", name: "DustTRAK DRX Desktop Aerosol Monitor 8533", category: "air-monitoring", image: "PRODUCT_IMAGES/51381-dusttrak-drx-8533.jpg", application: "Indoor air quality, Air monitoring", alternatives: [{ name: "No substitute", desc: "" }], differences: "Other dust meters do not display multiple particle sizes at once", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Air Sampling Pumps", desc: "Filter media 37mm or 25mm cassettes", type: "equipment" }] },
+            { id: "51242", name: "PID-ppbRAE 3000 10.6eV PGM-7340", category: "air-monitoring", image: "PRODUCT_IMAGES/51242-ppbrae-3000.jpg", application: "Air Monitoring, Indoor air quality, soil analysis", alternatives: [{ name: "RKI GX6000 with low range PID sensor", desc: "Alternative PID monitor" }], differences: "RKI GX-6000 with low range PID sensor: 0-2000 ppm", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Tedlar Bags", desc: "For sample collection", type: "equipment" }, { name: "Calibration Gas & Soil Jars", desc: "For testing", type: "equipment" }] },
+            { id: "51306", name: "Helium Leak Detector - MGD-2002", category: "leak-detection", image: "PRODUCT_IMAGES/51306-helium-leak-detector.jpg", application: "Leak detection", alternatives: [{ name: "No substitute", desc: "" }], upsells: [{ name: "Helium Gas", desc: "For leak detection testing", type: "equipment" }, { name: "Smoke Tracer Tubes", desc: "Visual leak detection aid", type: "equipment" }] },
+            { id: "51260", name: "Gas meter- QRAE 3 (PGM-2500)", category: "confined-space", image: "PRODUCT_IMAGES/51260-qrae-3.jpg", application: "Confined space entry, Indoor Air Quality", alternatives: [{ name: "RKI GX6000", desc: "Basic multi-gas" }, { name: "RKI GX2012", desc: "Compact model" }, { name: "MultiRAE 6228", desc: "Advanced multi-gas" }], differences: "Some of the substitutes may carry higher rental rates", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, respirators, cartridges", type: "ppe" }, { name: "Calibration Gas", desc: "Tedlar bags, calibration gas, soil jars", type: "equipment" }, { name: "Rescue Equipment", desc: "Tripod, winch, harness system", type: "equipment" }, { name: "Manhole Blower", desc: "For confined space ventilation", type: "equipment" }] },
+            { id: "54116", name: "Olympus 38DL PLUS", category: "ndt", image: "PRODUCT_IMAGES/54116-olympus-38dl.jpg", application: "NDT, Plant turnarounds, metal thickness testing", alternatives: [{ name: "GE DMS GO", desc: "Portable thickness gauge" }, { name: "GE DMS 2", desc: "Digital measurement system" }, { name: "Cygnus 1", desc: "Ultrasonic gauge" }], differences: "Minor differences in operation and accessories", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }] },
+            { id: "51428", name: "PortaCount Pro+ TSI Model 8038", category: "respiratory", image: "PRODUCT_IMAGES/51428-portacount-8038.jpg", application: "Respirator and N95 mask fit testing", alternatives: [{ name: "TSI PortaCount 8048", desc: "Advanced model no display" }, { name: "TSI PortaCount 8030", desc: "Basic model" }], differences: "8048 requires mobile device. 8030 cannot test N95 masks", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Filter Media", desc: "37mm or 25mm filter cassettes", type: "equipment" }] },
+            { id: "51360", name: "MIE pDR-1000 DataRAM", category: "air-monitoring", image: "PRODUCT_IMAGES/51360-pdr-1000.jpg", application: "Air Quality, perimeter monitoring, clean rooms", alternatives: [{ name: "TSI AM510", desc: "Area monitor" }, { name: "TSI AM 520", desc: "Advanced area monitor" }], differences: "Comparable performance across models with minor feature variations", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Air Sampling Pumps", desc: "Filter media 37mm or 25mm cassettes", type: "equipment" }] },
+            { id: "55377", name: "TVA 2020 FID-PID IG with GPS/BT", category: "air-monitoring", image: "PRODUCT_IMAGES/55377-tva-2020-gps.jpg", application: "Air Monitoring, soil analysis, Landfill perimeter", alternatives: [{ name: "TVA1000", desc: "Basic model" }, { name: "TVA 2020", desc: "Standard model" }], differences: "The TVA 1000 and TVA 2020 do not have Bluetooth or GPS capability", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, tedlar bags", type: "ppe" }, { name: "Calibration Gas", desc: "Additional calibration gas, soil jars", type: "equipment" }, { name: "GPS", desc: "GPS module for mapping", type: "equipment" }] },
+            { id: "54382", name: "TVA 2020 Toxic Vapor Analyzer 120V", category: "air-monitoring", image: "PRODUCT_IMAGES/54382-tva-2020.jpg", application: "Air Monitoring, Indoor air quality, soil analysis", alternatives: [{ name: "TVA1000", desc: "Basic model without Bluetooth/GPS" }], differences: "The TVA 1000 does not have Bluetooth or GPS", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, respirators, cartridges", type: "ppe" }, { name: "Calibration Gas", desc: "Tedlar bags, calibration gas, soil jars", type: "equipment" }, { name: "GPS", desc: "For location tracking and mapping", type: "equipment" }] },
+            { id: "55459", name: "Landfill Meter-GEM5000", category: "landfill-monitoring", image: "PRODUCT_IMAGES/55459-gem5000.jpg", application: "Landfill gas monitoring", alternatives: [{ name: "Landtec GEM2000 plus", desc: "Basic landfill gas monitor" }], differences: "The GEM5000 plus is the newer version of the GEM2000 plus", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, respirators, cartridges", type: "ppe" }, { name: "Calibration Gas", desc: "Tedlar bags, additional calibration gas", type: "equipment" }] },
+            { id: "51419", name: "EDGE 5 Noise Dosimeter", category: "respiratory", image: "PRODUCT_IMAGES/51419-edge-5.jpg", application: "Health and Safety, Industrial hygiene", alternatives: [{ name: "No substitute", desc: "" }], upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }] },
+            { id: "51350", name: "RKI GX-6000 VDC Only (0-6000 ppm PID)", category: "air-monitoring", image: "PRODUCT_IMAGES/51350-rki-gx6000.jpg", application: "Air Monitoring, Indoor air quality, soil analysis", alternatives: [{ name: "MiniRAE 3000", desc: "Compact PID monitor" }], differences: "MiniRAE 3000 range: 0-15,000 ppm vs RKI GX-6000 range: 0-6000 ppm", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Tedlar Bags", desc: "For sample collection", type: "equipment" }, { name: "Calibration Gas & Soil Jars", desc: "For testing", type: "equipment" }] },
+            { id: "54322", name: "Thermo Niton XL2 980 GOLDD", category: "soil-analysis", image: "PRODUCT_IMAGES/54322-niton-xl2.jpg", application: "Soil Analysis, Lead Paint detection, alloy analysis", alternatives: [{ name: "Other XRFs", desc: "Depending on detection mode" }], differences: "Other than available modes, no major differences in use", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Soil Supplies", desc: "Soil jars, mixing bowls, scoops, scale rental", type: "equipment" }] },
+            { id: "54746", name: "GPS- Trimble GeoX7 (Handheld)", category: "site-assessment", image: "PRODUCT_IMAGES/54746-trimble-geo7x.jpg", application: "Site assessment, soil sampling, wetland delineation", alternatives: [{ name: "GeoXH", desc: "Accuracy plus/minus 1-2m" }, { name: "GeoXT", desc: "Basic handheld GPS" }], differences: "Trimble Geo7X accuracy: 0.05m; GeoXH: sub-foot 30cm; GeoXT: sub-meter 30cm", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Field Equipment", desc: "Field boots, wire flags, casting clay, stakes", type: "equipment" }, { name: "Antennas", desc: "External antennas for increased accuracy", type: "equipment" }] },
+            { id: "51246", name: "PID-UltraRAE 3000 - 9.8 120V", category: "soil-analysis", image: "PRODUCT_IMAGES/51246-ultrarae-3000.jpg", application: "Benzene detection, soil remediation, soil analysis", alternatives: [{ name: "RKI GX6000 benzene specific", desc: "For benzene detection" }], differences: "Requires different benzene SEP tubes depending on manufacturer", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses, respirators", type: "ppe" }, { name: "Calibration & Sampling", desc: "Tedlar bags, calibration gas, soil jars", type: "equipment" }] },
+            { id: "51666", name: "Horiba U-52 Water Quality Meter", category: "water-quality", image: "PRODUCT_IMAGES/51666-horiba-u52.jpg", application: "Low Flow Sampling, surface water monitoring", alternatives: [{ name: "YSI ProDSS", desc: "Alternative water quality meter" }, { name: "YSI EXO2 Sondes", desc: "Advanced options" }], differences: "No major visual differences. One complimentary bottle of solution included", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, tubing, pump", type: "equipment" }] },
+            { id: "51657", name: "YSI 556 MPS 556-01 incl Case", category: "water-quality", image: "PRODUCT_IMAGES/51657-ysi-556.jpg", application: "Low Flow Sampling, surface water monitoring", alternatives: [{ name: "YSI 6920", desc: "Basic water quality meter" }, { name: "YSI 600 XL", desc: "Extended capabilities" }, { name: "YSI ProDSS", desc: "Professional series" }], differences: "There are price differences between models", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, poly sheeting, tubing", type: "equipment" }] },
+            { id: "51882", name: "Controller/Compressor QED MP50", category: "water-quality", image: "PRODUCT_IMAGES/51882-qed-mp50.jpg", application: "Water Quality, water sampling, Low Flow Sampling", alternatives: [{ name: "MP-10", desc: "Compact compressor" }, { name: "3020 compressor", desc: "Alternative model" }, { name: "MP15", desc: "Mid-range option" }], differences: "MP50 is the premium model. MP-10 and 3020 are Neo sonics", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }] },
+            { id: "51659", name: "YSI ProSeries Professional Plus", category: "water-quality", image: "PRODUCT_IMAGES/51659-ysi-pro.jpg", application: "Low Flow Sampling, surface water monitoring", alternatives: [{ name: "YSI 556", desc: "Basic option" }, { name: "YSI 600 XL", desc: "Extended range" }], differences: "No major differences in functionality", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, poly sheeting, tubing", type: "equipment" }] },
+            { id: "51860", name: "PINE Peri-Pump (DC Only)", category: "water-quality", image: "PRODUCT_IMAGES/51860-pine-peripump.jpg", application: "Low Flow Sampling", alternatives: [{ name: "Solinst 410 pump", desc: "Bladder pump option" }, { name: "Alexis pump", desc: "Alternative brand" }], differences: "The Solinst 410 pump does not have AC options", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Tubing & Supplies", desc: "LDPE tubing, silicone tubing, poly sheeting", type: "equipment" }] },
+            { id: "51880", name: "YSI 6920 MP Sonde", category: "water-quality", image: "PRODUCT_IMAGES/51880-ysi-6920.jpg", application: "Low Flow Sampling, surface water monitoring", alternatives: [{ name: "YSI 8620", desc: "Advanced model" }, { name: "YSI ProDSS", desc: "Professional series" }], differences: "The YSI ProDSS cannot be used for long term data logging", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, tubing, pump", type: "equipment" }] },
+            { id: "51744", name: "IP-100 Solinst", category: "water-quality", image: "PRODUCT_IMAGES/51744-ip-100.jpg", application: "Water Quality, Low-Flow sampling, ground water", alternatives: [{ name: "Solinst IPs over 100 feet", desc: "Extended depth models" }, { name: "Heron IP", desc: "Alternative brand" }], differences: "No major differences between models", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, tubing, pump", type: "equipment" }] },
+            { id: "61223", name: "QED SamplerPro Bladder Pump 1.75", category: "water-quality", image: "PRODUCT_IMAGES/61223-qed-bladder-pump.jpg", application: "Water Quality, water sampling, Low Flow Sampling", alternatives: [{ name: "Geotech bladder pumps", desc: "With Teflon bladders" }], differences: "Teflon bladders are more expensive than poly bladders", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, tubing, pump", type: "equipment" }] },
+            { id: "56029", name: "YSI PRO DSS-10 Meter 4 port Cable", category: "water-quality", image: "PRODUCT_IMAGES/56029-ysi-prodss.jpg", application: "Low Flow Sampling, surface water monitoring", alternatives: [{ name: "YSI 8620", desc: "Standard option" }, { name: "Horiba U-52", desc: "Different brand" }, { name: "YSI EXO2 sondes", desc: "Advanced sondes" }], differences: "The Horiba U-52 does not have optical DO. YSI EXO2 options are more expensive", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, tubing, pump", type: "equipment" }] },
+            { id: "51617", name: "Hach 2100Q Turbidimeter", category: "water-quality", image: "PRODUCT_IMAGES/51617-hach-2100q.jpg", application: "Low Flow Sampling, surface water monitoring", alternatives: [{ name: "LaMotte 2020we", desc: "Compact option" }, { name: "Lamotte 2020i", desc: "Intermediate model" }, { name: "Hanna 98703", desc: "Portable version" }], differences: "The LaMotte models do not meet calibration standards", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, tubing, pump", type: "equipment" }] },
+            { id: "51840", name: "2 inch Grundfos Pump - Leadless", category: "water-quality", image: "PRODUCT_IMAGES/51840-grundfos-pump.jpg", application: "Low Flow Sampling, well sampling", alternatives: [{ name: "ProActive ProHoister", desc: "Alternative brand" }, { name: "ProActive Mega-ProHoister", desc: "Heavy-duty version" }], differences: "None of the alternatives match the Grundfos flow rate and depth performance", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Well Sampling Equipment", desc: "2 inch tubing for pump, silicone tubing", type: "equipment" }] },
+            { id: "51777", name: "Sampler- Composite ISCO 6712", category: "water-quality", image: "PRODUCT_IMAGES/51777-isco-6712.jpg", application: "Waste water, storm water studies, manufacturing", alternatives: [{ name: "Isco 3700/3710 composite", desc: "Alternative composite sampler" }], differences: "The 6712 model cannot be used as easily with external instrumentation", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Equipment", desc: "LDPE tubing, silicone tubing, poly sheeting", type: "equipment" }, { name: "Flow Monitoring", desc: "Water level indicator, multi-parameter sonde", type: "equipment" }] },
+            { id: "51841", name: "Control Box for Grundfos 2 inch 120V", category: "water-quality", image: "PRODUCT_IMAGES/51841-grundfos-control.jpg", application: "Low Flow Sampling, well sampling", alternatives: [{ name: "No substitute", desc: "" }], upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Well Sampling Equipment", desc: "2 inch tubing for pump, silicone tubing", type: "equipment" }] },
+            { id: "51745", name: "IP-200 Solinst", category: "water-quality", image: "PRODUCT_IMAGES/51745-ip-200.jpg", application: "Water Quality, Low-Flow sampling, ground water", alternatives: [{ name: "Solinst IPs over 200 feet", desc: "Extended depth models" }, { name: "Heron IP", desc: "Alternative brand" }], differences: "No major differences between models", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Sampling Supplies", desc: "Sample jars, VOA vials, tubing, pump", type: "equipment" }] },
+            { id: "52051", name: "LevelTROLL 700 Basic- 30psig", category: "water-quality", image: "PRODUCT_IMAGES/52051-leveltroll-700.jpg", application: "Drawdown testing, pump tests, hydraulic conductivity", alternatives: [{ name: "Solinst Leveloggers", desc: "Alternative data logger" }, { name: "Van Essen Divers", desc: "Different brand" }], differences: "Customer must be OK with no vented depth and renting a baro unit", upsells: [{ name: "PPE Kit", desc: "Gloves, Tyvek, booties, safety glasses", type: "ppe" }, { name: "Testing Equipment", desc: "LDPE tubing, silicone tubing, poly sheeting", type: "equipment" }, { name: "Monitoring Equipment", desc: "Water level indicator, multi-parameter sonde", type: "equipment" }, { name: "Slug Testing Accessories", desc: "Plugged Reader, slugs for testing", type: "equipment" }] }
+        ];
+        var grid = document.getElementById("productsGrid");
+        var searchInput = document.getElementById("searchInput");
+        var filterButtons = document.querySelectorAll(".filter-btn");
+        var currentFilter = "all";
+        function renderProducts(filter, searchTerm) {
+            grid.innerHTML = "";
+            var filtered = products.filter(function(p) {
+                var matchesFilter = filter === "all" || p.category === filter;
+                var matchesSearch = !searchTerm || p.name.toLowerCase().includes(searchTerm.toLowerCase()) || p.id.includes(searchTerm) || p.application.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="no-results"><h2>No products found</h2></div>';
+                return;
+            }
+            filtered.forEach(function(product) {
+                var card = document.createElement("div");
+                card.className = "product-card";
+                var alternativesHTML = product.alternatives ? '<div class="alternatives-section"><div class="section-title">Alternatives</div><div class="alternatives-list">' + product.alternatives.map(function(alt) { return '<div class="alternative-item"><div class="alternative-name">' + alt.name + '</div>' + (alt.desc ? '<div class="alternative-desc">' + alt.desc + '</div>' : '') + '</div>'; }).join('') + '</div>' + (product.differences ? '<div class="differences-box"><strong>Key Differences:</strong> ' + product.differences + '</div>' : '') + '</div>' : '';
+                var upsellsHTML = product.upsells ? '<div class="upsell-section"><div class="section-title">Recommended Add-ons</div><div class="upsell-items">' + product.upsells.map(function(u) { return '<div class="upsell-item"><div class="upsell-name">' + u.name + '<span class="badge badge-' + u.type + '">' + u.type + '</span></div><div class="upsell-desc">' + u.desc + '</div></div>'; }).join('') + '</div></div>' : '';
+                card.innerHTML = '<div class="product-header"><div class="product-icon">' + (product.image ? '<img src="' + product.image + '" alt="' + product.name + '">' : '<span style="font-size:32px">📦</span>') + '</div><div class="product-info"><div class="product-name">' + product.name + '</div><div class="product-id">M3 #' + product.id + '</div></div></div><div class="application">' + product.application + '</div>' + alternativesHTML + upsellsHTML;
+                grid.appendChild(card);
+            });
+        }
+        searchInput.addEventListener("input", function(e) { renderProducts(currentFilter, e.target.value); });
+        filterButtons.forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                filterButtons.forEach(function(b) { b.classList.remove("active"); });
+                btn.classList.add("active");
+                currentFilter = btn.dataset.filter;
+                renderProducts(currentFilter, searchInput.value);
+            });
+        });
+        renderProducts("all", "");
+    </script>
+</body>
+</html>
